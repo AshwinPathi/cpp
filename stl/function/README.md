@@ -1,3 +1,3 @@
-# Any
+# Function
 
-Implementation of [`std::any`](https://en.cppreference.com/w/cpp/utility/any).
+Implementation of [`std::function`](https://en.cppreference.com/w/cpp/utility/functional/function).
