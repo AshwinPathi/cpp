@@ -120,7 +120,7 @@ Please find below some example of questions that have been asked to various clie
 -   Given a node in a tree, the head of a tree and an integer, return a list of nodes that are that distance away from the node (including above).
 -   What is the complexity of the answer? How can this be improved?
 -   Question on heap vs stack memory and analysis of code causing a stack overflow
--   Given an arithmetic expression in a string format (e.g. "(2*3)+((1+2)*7)") create a function that evaluates the expression, taking operator precedence into account, and returns the result as an integer
+-   Given an arithmetic expression in a string format (e.g. `"(2*3)+((1+2)*7)"`) create a function that evaluates the expression, taking operator precedence into account, and returns the result as an integer
 -   Find pythagorean triplet in list of nums
 -   How to find a median in a streaming list (5m)
 -   How many bits is a long
