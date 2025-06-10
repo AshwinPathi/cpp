@@ -5,24 +5,16 @@
 
 
 int main() {
-  my::Scheduler sched;
+  my::Scheduler<void, int> sched;
   sched.start();
 
-  sched.schedule([](){
-    int x = 0;
-    for (int i = 0; i < 10000; i++) {
-      x += i * 3;
-    }
+  sched.schedule(5, [](int x){
     std::cout << "Computed: " << x << '\n';
-  }, 5);
+  }, 435);
 
-  sched.schedule([](){
-    int x = 0;
-    for (int i = 0; i < 10000; i++) {
-      x += (i - 3);
-    }
+  sched.schedule(2, [](int x){
     std::cout << "Computed: " << x << '\n';
-  }, 2);
+  }, 90234);
 
 
   // Make sure we stall here so that all the threads have time to run.

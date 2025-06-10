@@ -6,15 +6,16 @@
 #include <queue>
 #include <unordered_set>
 #include <iostream>
-
+#include <utility>
 
 namespace my {
 
+template <typename R, typename... Args>
 class Scheduler {
  public:
   using Clock = std::chrono::steady_clock;
   using Time = Clock::time_point;
-  using Task = std::function<void(void)>;
+  using Task = std::function<R(Args...)>;
   using TaskID = uint64_t;
 
   Scheduler() = default;
@@ -58,15 +59,15 @@ class Scheduler {
   }
 
   // Wrapper to schedule a |task| |delay| seconds from now.
-  TaskID schedule(Task task, size_t delay = 0) {
+  TaskID schedule(size_t delay, Task task, Args... args) {
     auto scheduled_time = current_time() + std::chrono::seconds{delay};
-    return schedule(std::move(task), scheduled_time);
+    return schedule(scheduled_time, std::move(task), args...);
   }
 
   // Schedule a |task| to be executed at |time|. Returns the ID of the scheduled task.
-  TaskID schedule(Task task, Time time) {
+  TaskID schedule(Time time, Task task, Args... args) {
     std::scoped_lock lck(tasks_mutex_);
-    Schedulable scheduled_task{std::move(task), time, current_id_};
+    Schedulable scheduled_task{std::move(task), std::make_tuple((args)...), time, current_id_};
     std::cout << "----- Scheduling " << scheduled_task.task_id  << " at: " << get_seconds(time) << " -----\n";
     tasks_pq_.emplace(scheduled_task);
     scheduled_ids_.emplace(current_id_);
@@ -90,6 +91,7 @@ class Scheduler {
   // An object that can be scheduled and placed in a priority queue.
   struct Schedulable {
     Task task;
+    std::tuple<Args...> task_args;
     Time time;
     TaskID task_id;
     bool operator<(const Schedulable& other) const {
@@ -121,7 +123,8 @@ class Scheduler {
       std::cout << "Running task id: " << schedulable.task_id << " at: " << get_seconds(current_time()) << '\n';
       lck.unlock();
       // Run the task without the mutex
-      schedulable.task();
+      // schedulable.task();
+      std::apply(schedulable.task, schedulable.task_args);
     }
   }
 
