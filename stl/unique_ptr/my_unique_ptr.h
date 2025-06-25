@@ -12,30 +12,30 @@ class unique_ptr {
     public:
         // constructors
         unique_ptr() : data_(nullptr) {
-        #ifdef DEBUG
+#ifdef DEBUG
             std::cout << "Nullptr constructor" << std::endl;
-        #endif
+#endif
         }
         explicit unique_ptr(T* data) : data_(data) {
-        #ifdef DEBUG
+#ifdef DEBUG
             std::cout << "Basic constructor" << std::endl;
-        #endif
+#endif
         }
 
         // Move constructors
         unique_ptr(unique_ptr&& other) noexcept {
-        #ifdef DEBUG
+#ifdef DEBUG
             std::cout << "Move constructor" << std::endl;
-        #endif
+#endif
             cleanup();
             data_ = other.data_;
             other.data_ = nullptr;
         }
 
         unique_ptr& operator=(unique_ptr&& other) noexcept {
-        #ifdef DEBUG
+#ifdef DEBUG
             std::cout << "Move assignment" << std::endl;
-        #endif
+#endif
             if (this == &other) {
                 return *this;
             }
@@ -52,9 +52,9 @@ class unique_ptr {
 
         // destructor
         ~unique_ptr() {
-        #ifdef DEBUG
+#ifdef DEBUG
             std::cout << "Destructor called" << std::endl;
-        #endif
+#endif
             cleanup(); 
         }
 
